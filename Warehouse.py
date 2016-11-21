@@ -67,7 +67,7 @@ class Shelf(object):
             for j in range(self.width):
                 oneD = []
                 for k in range(self.height):
-                    oneD.append(' ')
+                    oneD.append('x')
                 twoD.append(oneD)
             self.positions.append(twoD)
         # self.showShelf()
