@@ -67,13 +67,19 @@ class Shelf(object):
             for j in range(self.width):
                 oneD = []
                 for k in range(self.height):
-                    oneD.append('X')
+                    oneD.append(' ')
                 twoD.append(oneD)
             self.positions.append(twoD)
         # self.showShelf()
 
-    def placeBox(self, box, x, y):
-        self.positions[x][y][0] = box.contents
+    def placeBox(self, box, width, length):
+        for i in range(width, width + box.width):
+            for j in range(length, length + box.length):
+                for k in range(0, 0 + box.height):
+                    self.positions[i][j][k] = box.contents
+        # self.positions[width][length][0] = box.contents
+        # self.positions[width + box.width - 1][length + box.length - 1][0] = box.contents
+
 
     def showShelf(self):
         print "showing shelf. width", self.width, "length", self.length
@@ -90,9 +96,9 @@ class Shelf(object):
 
 class Box(object):
     def __init__(self, length, width, height, contents):
-        self.height = length
+        self.length = length
         self.width = width
-        self.depth = height
+        self.height = height
         self.contents = contents
 
     def setPosition(self, floor, shelf, distanceFromBeginning):
