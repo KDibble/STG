@@ -5,7 +5,7 @@ def AddBox(boxTypes, warehouse, box):
     validSpots = GetValid(boxTypes, box, warehouse)
 
     #Need to determine which spot is optimal from valid
-    chosenSpot = GetOptimal()
+    chosenSpot = GetOptimal(validSpots)
 
     #Remove newly occupied spots from lists
 
@@ -19,8 +19,8 @@ def GetValid(boxTypes, box, warehouse):
 
     #adds all valid spots to a list
     for spot in boxTypes[box.size]:
-        for coordinate in spot:
-            if not warehouse[coordinate] == 'x':
+        for floor, shelf, coordinate in spot:
+            if not ((warehouse[floor])[shelf])[coordinate] == ' x ':
                 occupied += 1
         if occupied == 0:
             validSpots.append(spot)
