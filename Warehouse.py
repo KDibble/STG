@@ -19,21 +19,26 @@ class Warehouse(object):
         for i in range(self.numFloors):
             for j in range(self.aislesPerFloor):
                 for k in range(self.layersPerAisles):
-                    for k in range(self.length-6):
-                        for l in range(self.layerHeight-3):
+                    for l in range(self.length-6):
+                        for m in range(self.layerHeight-3):
                             coordinates=[]
                             for x in range(6):
                                 for y in range(3):
                                     coordinates.append((x,y))
-                            open60x30.append((i, j, (coordinates)))
+                            open60x30.append((i, j, k, (coordinates)))
         self.boxTypes['60x30'] = open60x30
         open90x40 = []
-        #for i in range(self.numFloors):
-            #for j in range(self.aislesPerFloor):
-                #for k in range(self.length-9):
-                    #for l in range(self.shelfHieght-4):
-                        #self.open90x40.append((i, j, (k, l)))
-        #self.boxTypes['90x40'] = open90x40
+        for i in range(self.numFloors):
+            for j in range(self.aislesPerFloor):
+                for k in range(self.layersPerAisles):
+                    for l in range(self.length-9):
+                        for m in range(self.layerHeight-4):
+                            coordinates=[]
+                            for x in range(9):
+                                for y in range(4):
+                                    coordinates.append((x,y))
+                            open90x40.append((i, j, k, (coordinates)))
+        self.boxTypes['90x40'] = open90x40
         #((self.inventory[floor])[shelf]).showShelf()
 
     def resetFloors(self):
@@ -46,11 +51,11 @@ class Warehouse(object):
             for j in range(self.aislesPerFloor):
                 (self.inventory[i])[j] = dict()
                 for k in range(self.layersPerAisles):
-                    ((self.inventory[i])[j])[k] = Shelf(self.length, self.layerHeight)
+                    ((self.inventory[i])[j])[k] = Layer(self.length, self.layerHeight)
             print "finished floor", i
 
-    def placeBox(self, box, floorIndex, shelfIndex, x, y):
-        (self.inventory[floorIndex])[shelfIndex].placeBox(box, x, y)
+    def placeBox(self, box, floorIndex, aisleIndex, layerIndex, x, y):
+        ((self.inventory[floorIndex])[aisleIndex])[layerIndex].placeBox(box, x, y)
 
     def showWharehouse(self):
         for floor in self.inventory:
@@ -58,25 +63,25 @@ class Warehouse(object):
             for aisle in self.inventory[floor]:
                 print 'Aisle', aisle
                 for layer in (self.inventory[floor])[aisle]:
-                    ((self.inventory[floor])[aisle])[layer].showShelf()
+                    ((self.inventory[floor])[aisle])[self.layersPerAisle - layer].showLayer()
 
     def showFloor(self, floor):
         print 'Floor', floor
         for aisle in self.inventory[floor]:
             print 'Aisle', aisle
             for layer in (self.inventory[floor])[aisle]:
-                ((self.inventory[floor])[aisle])[layer].showShelf()
+                ((self.inventory[floor])[aisle])[self.layersPerAisle - layer].showLayer()
 
     def showAisle(self, floor, aisle):
         print 'Floor', floor, ' Aisle', aisle
         for layer in (self.inventory[floor])[aisle]:
-            ((self.inventory[floor])[aisle])[layer].showShelf()
+            ((self.inventory[floor])[aisle])[self.layersPerAisle - layer].showLayer()
 
     def showLayer(self, floor, aisle, layer):
         print 'Floor', floor, ' Aisle', aisle, ' Layer', layer
-        ((self.inventory[floor])[aisle])[layer].showShelf()
+        ((self.inventory[floor])[aisle])[layer].showLayer()
 
-class Shelf(object):
+class Layer(object):
     def __init__(self, length, height):
         #How wide are shelves? Let's say they're 60 cm, which is just under 2'
         self.positions = dict()
@@ -88,12 +93,12 @@ class Shelf(object):
                 self.positions[(i, k)] = ' x '
         #self.showShelf()
 
-    def placeBox(self, box, width, length):
-            for j in range(length, length + box.length):
-                for k in range(0, 0 + box.height):
-                    self.positions[(k, j)] = box.id
+    def placeBox(self, box, length, height):
+        for x in range(box.length-1):
+            for y in range(box.height-1):
+                self.positions[(length+x, height+y)] = box.id
 
-    def showShelf(self):
+    def showLayer(self):
         #print "showing shelf. height", self.height, "length", self.length
         for j in range(-1, self.height+1):
             length = ""
