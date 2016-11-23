@@ -1,20 +1,22 @@
 import math
 
-def Create_Warehouse():
-    warehouse = Warehouse(50, 50, 2) # 180 cm per floor, so for 100', 17 floors
+def Create_Warehouse(length, width, height, numFloors):
+    warehouse = Warehouse(length, width, height, numFloors)
+    # warehouse = Warehouse(50, 50, 2) # 180 cm per floor, so for 100', 17 floors
     return warehouse
 
 # Use cm for all measurements let's say 1000 cm each for width and height
 class Warehouse(object):
-    def __init__(self, l, h, numFloors):
+    def __init__(self, l, w, h, numFloors):
         self.length = l
         self.height = h
         self.numFloors = numFloors
-        self.aislesPerFloor = int(math.floor(self.length / 6))
-        self.layerHeight = 9
+        self.aislesPerFloor = int(math.floor(w / 6)) #60 cm width per aisle
+        self.layerHeight = 9 # 90 cm height per layer
         self.layersPerAisles = int(math.floor((self.height/self.numFloors)/self.layerHeight))
         self.resetFloors()
         self.boxTypes = dict()
+        self.manifest = dict() # What boxes are currently in the warehouse
         open60x30 = []
         for i in range(self.numFloors):
             for j in range(self.aislesPerFloor):
@@ -55,6 +57,8 @@ class Warehouse(object):
             print "finished floor", i
 
     def placeBox(self, box, floorIndex, aisleIndex, layerIndex, x, y):
+        print "placing into manifest:", box.id
+        self.manifest[box.id] = box
         ((self.inventory[floorIndex])[aisleIndex])[layerIndex].placeBox(box, x, y)
 
     def showWharehouse(self):
@@ -63,19 +67,19 @@ class Warehouse(object):
             for aisle in self.inventory[floor]:
                 print 'Aisle', aisle
                 for layer in (self.inventory[floor])[aisle]:
-                    ((self.inventory[floor])[aisle])[self.layersPerAisle - layer].showLayer()
+                    ((self.inventory[floor])[aisle])[layer].showLayer()
 
     def showFloor(self, floor):
         print 'Floor', floor
         for aisle in self.inventory[floor]:
             print 'Aisle', aisle
             for layer in (self.inventory[floor])[aisle]:
-                ((self.inventory[floor])[aisle])[self.layersPerAisle - layer].showLayer()
+                ((self.inventory[floor])[aisle])[layer].showLayer()
 
     def showAisle(self, floor, aisle):
         print 'Floor', floor, ' Aisle', aisle
         for layer in (self.inventory[floor])[aisle]:
-            ((self.inventory[floor])[aisle])[self.layersPerAisle - layer].showLayer()
+            ((self.inventory[floor])[aisle])[self.layersPerAisles - layer].showLayer()
 
     def showLayer(self, floor, aisle, layer):
         print 'Floor', floor, ' Aisle', aisle, ' Layer', layer
@@ -94,26 +98,31 @@ class Layer(object):
         #self.showShelf()
 
     def placeBox(self, box, length, height):
-        for x in range(box.length-1):
-            for y in range(box.height-1):
+        for x in range(box.length):
+            for y in range(box.height):
                 self.positions[(length+x, height+y)] = box.id
 
     def showLayer(self):
-        #print "showing shelf. height", self.height, "length", self.length
-        for j in range(-1, self.height+1):
-            length = ""
+        print "showing shelf. height", self.height, "length", self.length
+
+        #go through the top to bottom
+            #go through the left to right
+        for j in range(self.height, -2, -1):
+            row = ""
             for i in range(self.length):
-                if j == -1 or j == self.height:
-                    length += "---"
+                if j < 0 or j == self.height: #The top or bottom
+                    row += "==="
                     if i % 10 == 0:
-                        length += "-"
+                        row += "="
                 else:
                     if i % 10 == 0:
-                        length += "|"
-                    length += str(self.positions[(i, j)])
-            if not (j == -1 or j == self.height):
-                length += "|"
-            print length
+                        row += "|"
+                    row += str(self.positions[(i, j)])
+            if (j < 0 or j == self.height): # print a row's ending visual shelf
+                row += "="
+            else: # print an ending "support beam" in the middle rows
+                row += "|"
+            print row
 
 class Box(object):
     def __init__(self, length, width, height, contents, id):
@@ -123,11 +132,9 @@ class Box(object):
         self.size = str(length)+'x'+str(height)
         self.contents = contents
         self.id = id
-        self.floor = None
-        self.shelf = None
-        self.position = None
 
-    def setPosition(self, floor, shelf, position):
+    def setPosition(self, floor, aisle, layer, coordinates):
         self.floor = floor
-        self.shelf = shelf
-        self.position = position
+        self.aisle = aisle
+        self.layer = layer
+        self.coordinates = coordinates
