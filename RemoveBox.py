@@ -1,6 +1,7 @@
 def removeBox(id, warehouse):
     print '\tremoveBox(): removing box of id', id
     box = warehouse.manifest[id]
+    warehouse.manifest[id] = None # remove the box
     layer = ((warehouse.inventory[box.floor])[box.aisle])[box.layer]
     footprint = set()
     for (x, y) in box.coordinates:
