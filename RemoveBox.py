@@ -15,7 +15,7 @@ def removeBox(id, warehouse):
         for y in range(layer.height):
             element = layer.positions[(x, y)]
             if element != ' x ' and element not in boxesAbove:
-                print 'found box', element, 'above'
+                # print 'found box', element, 'above'
                 boxesAbove.append(element)
 
     #call gravity on boxesAbove
@@ -25,9 +25,9 @@ def removeBox(id, warehouse):
 
 def gravity(box, warehouse):
     # find the bottom row and see if we can move the box down
-    print '\tgravity(): gravity on box', box.id
+    # print '\tgravity(): gravity on box', box.id
     initElevation = float("inf")
-    print box.coordinates
+    # print box.coordinates
     for (x, y) in box.coordinates:
         # print (x, y)
         if y < initElevation:
@@ -35,7 +35,7 @@ def gravity(box, warehouse):
             bottomRow = list()
         if y <= initElevation:
             bottomRow.append((x, y))
-    print 'bottomRow', bottomRow
+    # print 'bottomRow', bottomRow
 
     positions = ((warehouse.inventory[box.floor])[box.aisle])[box.layer].positions
     newElevation = initElevation
@@ -50,7 +50,7 @@ def gravity(box, warehouse):
             if positions[coord] == ' x ':
                 newBottomRow.append(coord)
             else:
-                print "whoops, box", positions[coord], "is in the way"
+                # print "whoops, box", positions[coord], "is in the way"
                 exitEarly = True
                 break # no multi-loop break statements :_(
         if exitEarly: break

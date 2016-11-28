@@ -35,8 +35,8 @@ testWarehouse.showWarehouse()
 # print box.id, "is at", (testWarehouse.manifest[box.id]).coordinates
 # print box2.id, "is at", (testWarehouse.manifest[box2.id]).coordinates
 
-#RemoveBox.removeBox(box.id, testWarehouse)
-#testWarehouse.showWharehouse()
+RemoveBox.removeBox(box.id, testWarehouse)
+print 'removed box', box.id
+testWarehouse.showWarehouse()
 
 print "Goodbye"
-print ('qux' == ' x ')
