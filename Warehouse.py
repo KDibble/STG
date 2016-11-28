@@ -21,11 +21,11 @@ class Warehouse(object):
         for i in range(self.numFloors):
             for j in range(self.aislesPerFloor):
                 for k in range(self.layersPerAisles):
-                    for l in range(self.length-6):
-                        for m in range(self.layerHeight-3):
+                    for l in range(self.length-5):
+                        for m in range(self.layerHeight-2):
                             coordinates=[]
-                            for x in range(6):
-                                for y in range(3):
+                            for x in range(l, l+6):
+                                for y in range(m, m+3):
                                     coordinates.append((x,y))
                             open60x30.append((i, j, k, (coordinates)))
         self.boxTypes['60x30'] = open60x30
@@ -33,11 +33,11 @@ class Warehouse(object):
         for i in range(self.numFloors):
             for j in range(self.aislesPerFloor):
                 for k in range(self.layersPerAisles):
-                    for l in range(self.length-9):
-                        for m in range(self.layerHeight-4):
+                    for l in range(self.length-8):
+                        for m in range(self.layerHeight-3):
                             coordinates=[]
-                            for x in range(9):
-                                for y in range(4):
+                            for x in range(l, l+9):
+                                for y in range(m, m+4):
                                     coordinates.append((x,y))
                             open90x40.append((i, j, k, (coordinates)))
         self.boxTypes['90x40'] = open90x40
@@ -56,12 +56,13 @@ class Warehouse(object):
                     ((self.inventory[i])[j])[k] = Layer(self.length, self.layerHeight)
             print "finished floor", i
 
-    def placeBox(self, box, floorIndex, aisleIndex, layerIndex, x, y):
+    def placeBox(self, box, floorIndex, aisleIndex, layerIndex, coordinates):
         print "placing into manifest:", box.id
         self.manifest[box.id] = box
-        ((self.inventory[floorIndex])[aisleIndex])[layerIndex].placeBox(box, x, y)
+        for coordinate in coordinates:
+            ((self.inventory[floorIndex])[aisleIndex])[layerIndex].placeBox(box, coordinate[0], coordinate[1])
 
-    def showWharehouse(self):
+    def showWarehouse(self):
         for floor in self.inventory:
             print 'Floor', floor
             for aisle in self.inventory[floor]:
@@ -98,9 +99,7 @@ class Layer(object):
         #self.showShelf()
 
     def placeBox(self, box, length, height):
-        for x in range(box.length):
-            for y in range(box.height):
-                self.positions[(length+x, height+y)] = box.id
+            self.positions[(length, height)] = box.id
 
     def showLayer(self):
         print "showing shelf. height", self.height, "length", self.length
