@@ -26,9 +26,10 @@ def GetValid(boxTypes, box, warehouse):
     return validSpots
 
 
-def GetOptimal(validSpots, boxTypes):
+def GetOptimal(validSpots, boxTypes, warehouse):
     chosenSpot = None
-    spotLength = 999999999
+    minValue = 999999999
+    value = 0
     removed = []
 
     for spot in validSpots:
@@ -38,18 +39,21 @@ def GetOptimal(validSpots, boxTypes):
         coordinates = spot[3]
         for coordinate in coordinates:
             for type in boxTypes:
+                if type == '60x30':
+                    size = warehouse.smallBoxes
+                else:
+                    size = warehouse.bigBoxes
                 for spot2 in boxTypes[type]:
                     floor2 = spot2[0]
                     aisle2 = spot2[1]
                     layer2 = spot2[2]
                     coordinates2 = spot2[3]
                     if coordinate in coordinates2 and not coordinates2 in removed and floor == floor2 and aisle == aisle2 and layer == layer2:
-                        removed.append(spot2)
-        if len(removed) < spotLength:
+                        value += size / (warehouse.allBoxes + 1)
+        if value < minValue:
             chosenSpot = spot
-            spotLength = len(removed)
-        removed = []
-
+            minValue = value
+        value = 0
 
     return chosenSpot
 
@@ -61,10 +65,17 @@ def AddBox(warehouse, box):
     validSpots = GetValid(warehouse.boxTypes, box, warehouse)
 
     #Need to determine which spot is optimal from valid
-    chosenSpot = GetOptimal(validSpots, warehouse.boxTypes)
+    chosenSpot = GetOptimal(validSpots, warehouse.boxTypes, warehouse)
 
     #Remove newly occupied spots from lists
     box.setPosition(chosenSpot[0], chosenSpot[1], chosenSpot[2], chosenSpot[3])
     warehouse.placeBox(box, chosenSpot[0], chosenSpot[1], chosenSpot[2], chosenSpot[3])
+    if box.size == '60x30':
+        warehouse.smallBoxes += 1
+    else:
+        warehouse.bigBoxes += 1
+    warehouse.smallBoxes += 1
+    warehouse.allBoxes += 1
+
 
     #return new warehouse

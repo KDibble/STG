@@ -1,4 +1,4 @@
-import Warehouse, RemoveBox, AddBox
+import Warehouse, RemoveBox, AddBox, PeekAt
 
 print "Welcome to STG!"
 testWarehouse = Warehouse.Create_Warehouse(30, 6, 9, 1) # small warehouse for testing visibility
@@ -24,6 +24,7 @@ AddBox.AddBox(testWarehouse, box4)
 #warehouse.placeBox(Warehouse.Box(4, 2, 1, "3"), 0, 0, 0, 0, 2)
 #warehouse.inventory[0][0][0].showShelf()
 testWarehouse.showWarehouse()
+PeekAt.Peek(testWarehouse, '001')
 
 # if box.id in testWarehouse.manifest:
 #     print box.id, "is in manifest"

@@ -17,6 +17,9 @@ class Warehouse(object):
         self.resetFloors()
         self.boxTypes = dict()
         self.manifest = dict() # What boxes are currently in the warehouse
+        self.smallBoxes = 0
+        self.bigBoxes = 0
+        self.allBoxes = 0
         open60x30 = []
         for i in range(self.numFloors):
             for j in range(self.aislesPerFloor):
