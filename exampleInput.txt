@@ -1,0 +1,51 @@
+add box
+001
+stuff
+2
+show
+add box
+009
+stuff
+1
+show
+add box
+003
+stuff
+2
+show
+add box
+004
+stuff
+2
+show
+add box
+005
+stuff
+1
+show
+add box
+006
+stuff
+2
+show
+add box
+007
+stuff
+1
+show
+add box
+008
+stuff
+1
+show
+add box
+002
+stuff
+2
+show
+add box
+010
+stuff
+2
+show
+exit

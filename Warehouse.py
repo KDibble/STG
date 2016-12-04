@@ -67,7 +67,7 @@ class Warehouse(object):
 
     def showWarehouse(self):
         for floor in self.inventory:
-            print 'Floor', floor
+            print '\n\nFloor', floor
             for aisle in self.inventory[floor]:
                 print 'Aisle', aisle
                 for layer in (self.inventory[floor])[aisle]:

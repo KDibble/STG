@@ -1,0 +1,20 @@
+add box
+001
+stuff
+2
+add box
+002
+stuff
+1
+add box
+003
+stuff
+2
+add box
+004
+stuff
+2
+show
+remove 001
+show
+exit

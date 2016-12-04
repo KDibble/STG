@@ -1,7 +1,5 @@
-import Warehouse, RemoveBox, AddBox, PeekAt, re
+import Warehouse, UI
 
-print "Welcome to STG!"
-testWarehouse = Warehouse.Create_Warehouse(30, 6, 9, 1) # small warehouse for testing visibility
 # # warehouse = Warehouse.Create_Warehouse(50, 50, 50, 2)
 # box = Warehouse.Box(60, 30, 30, "stuff", '001')
 # AddBox.AddBox(testWarehouse, box)
@@ -40,54 +38,8 @@ testWarehouse = Warehouse.Create_Warehouse(30, 6, 9, 1) # small warehouse for te
 # testWarehouse.showWarehouse()
 # print "Goodbye"
 
+
+
 print "Welcome to STG!"
-loop = True
-while loop:
-    print "\nPlease enter an instruction."
-    print "Valid instructions are:\n" \
-          "\t\"add box\"\n" \
-          "\t\"remove <id>\" (example \"remove 001\")\n" \
-          "\tshow warehouse\n" \
-          "\t\"exit\""
-    line = raw_input()
-    # print line
-
-    if 'finish' in line or 'exit' in line or 'end' in line:
-        loop = False
-    elif 'add' in line:
-        id = raw_input('Enter box id (3 digit): ')
-        while len(id)!= 3:
-            print 'Please enter a 3 digit string'
-            id = raw_input('Enter box id (3 digit): ')
-
-        contents = raw_input('Enter box contents: ')
-
-        while True:
-            type = raw_input('Enter box type: type 1 (60cmX90cmX40cm) or type 2 (60cmX60cmX30cm): ')
-            if '1' in type:
-                box = Warehouse.Box(60, 90, 40, contents, id)
-                AddBox.AddBox(testWarehouse, box)
-                break
-            elif '2' in type:
-                box = Warehouse.Box(60, 30, 30, contents, id)
-                AddBox.AddBox(testWarehouse, box)
-                break
-            else:
-                print 'Invalid entry:', type
-
-    elif 'remove' in line:
-        while 'exit' not in line and 'back' not in line and 'finish' not in line:
-            match = re.match(r'^\s*remove (\w{3})\s*$', line, re.IGNORECASE)
-            if match:
-                try:
-                    RemoveBox.removeBox(match.group(1), testWarehouse)
-                except KeyError:
-                    print match.group(1), 'isn\'t in the warehouse'
-                break
-            else:
-                print 'Invalid remove command:', match
-                line = raw_input('Please enter \"remove <id>\" (example \"remove 001\" or \"back\" to go to the main menu: ')
-    elif 'show' in line:
-        testWarehouse.showWarehouse()
-    else:
-        print 'Invalid instruction'
+myWarehouse = Warehouse.Create_Warehouse(30, 12, 18, 1)  # small warehouse for testing visibility
+UI.runUi(myWarehouse)

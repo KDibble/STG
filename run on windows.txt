@@ -1,0 +1,2 @@
+cat exampleInput.txt | python example.py
+cat gravityExampleInput.txt | python example.py
